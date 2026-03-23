@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0A0A0F;
+  --color-primary: #7B2EDA;
+  --color-accent: #FF4D1C;
+  --color-highlight: #FF44CC;
+  --color-secondary-text: #A09BB3;
+  
+  --font-poppins: "Poppins", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-white font-poppins selection:bg-primary selection:text-white;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-[rgba(123,46,218,0.1)] backdrop-blur-md border border-primary/20 rounded-2xl;
+  }
+  
+  .btn-glow-primary {
+    @apply relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
+           bg-primary hover:shadow-[0_0_20px_rgba(123,46,218,0.6)] text-white font-bold py-4 px-8 rounded-xl;
+  }
+  
+  .btn-glow-accent {
+    @apply relative overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
+           bg-accent hover:shadow-[0_0_20px_rgba(255,77,28,0.6)] text-white font-bold py-4 px-8 rounded-xl;
+  }
+
+  .nav-link {
+    @apply text-secondary-text hover:text-white transition-colors duration-200 font-medium;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}

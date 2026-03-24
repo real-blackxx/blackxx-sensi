@@ -6,6 +6,18 @@ export default function AdPage() {
   const [timeLeft, setTimeLeft] = useState(25);
   const [isReady, setIsReady] = useState(false);
 
+  // Inject ad script when component mounts
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pl28967274.profitablecpmratenetwork.com/2e/2d/ae/2e2daea189fd4bb76f84a85c90809399.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      // Clean up: remove the script when component unmounts
+      document.body.removeChild(script);
+    };
+  }, []);
+
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);

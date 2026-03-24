@@ -6,18 +6,6 @@ export default function AdPage() {
   const [timeLeft, setTimeLeft] = useState(25);
   const [isReady, setIsReady] = useState(false);
 
-  // Inject ad script when component mounts
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://pl28967274.profitablecpmratenetwork.com/2e/2d/ae/2e2daea189fd4bb76f84a85c90809399.js';
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      // Clean up: remove the script when component unmounts
-      document.body.removeChild(script);
-    };
-  }, []);
-
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -27,6 +15,18 @@ export default function AdPage() {
     }
   }, [timeLeft]);
 
+  // Inject banner ad into the ad-space container
+  useEffect(() => {
+    const adContainer = document.getElementById('ad-space');
+    if (adContainer) {
+      adContainer.innerHTML = ''; // Clear any previous content
+      const script = document.createElement('script');
+      script.src = 'https://www.highperformanceformat.com/7ceb51f5358921a9733e23ce3093adbd/invoke.js';
+      script.async = true;
+      adContainer.appendChild(script);
+    }
+  }, []);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -35,18 +35,12 @@ export default function AdPage() {
     >
       <h2 className="text-3xl font-black mb-8 tracking-tight">PREPARING YOUR <span className="text-primary">DOWNLOAD</span></h2>
 
-      {/* Ad Space Placeholder */}
+      {/* Ad Space Container */}
       <div 
         id="ad-space" 
         className="w-full max-w-2xl aspect-video glass-card border-dashed border-2 border-primary/30 flex flex-col items-center justify-center gap-4 mb-12 group hover:border-primary/60 transition-colors"
       >
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-          <AlertCircle size={32} />
-        </div>
-        <div className="text-center">
-          <p className="text-xl font-bold text-white mb-1">Ad Space</p>
-          <p className="text-secondary-text text-sm">Advertisements will be displayed here.</p>
-        </div>
+        {/* Banner ad will be injected here */}
       </div>
 
       <div className="flex flex-col items-center gap-8">

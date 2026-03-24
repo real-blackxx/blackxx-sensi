@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, Timer as TimerIcon, AlertCircle } from 'lucide-react';
+import { Download, Timer as TimerIcon } from 'lucide-react';
 
 export default function AdPage() {
   const [timeLeft, setTimeLeft] = useState(25);
@@ -16,28 +16,62 @@ export default function AdPage() {
     }
   }, [timeLeft]);
 
-  // Inject the banner ad inside the ad-space container
+  // Inject banner ad at the top
   useEffect(() => {
-    const adContainer = document.getElementById('ad-space');
-    if (adContainer) {
-      // Clear any previous content
-      adContainer.innerHTML = '';
-
-      // Set the ad configuration globally (as expected by the script)
-      window.atOptions = {
-        key: '7ceb51f5358921a9733e23ce3093adbd',
-        format: 'iframe',
-        height: 90,
-        width: 728,
-        params: {}
-      };
-
-      // Create the ad script
-      const script = document.createElement('script');
-      script.src = 'https://www.highperformanceformat.com/7ceb51f5358921a9733e23ce3093adbd/invoke.js';
-      script.async = true;
-      adContainer.appendChild(script);
+    let bannerContainer = document.getElementById('ad-top-banner');
+    if (!bannerContainer) {
+      bannerContainer = document.createElement('div');
+      bannerContainer.id = 'ad-top-banner';
+      bannerContainer.style.display = 'flex';
+      bannerContainer.style.justifyContent = 'center';
+      bannerContainer.style.margin = '1rem auto';
+      // Insert at the beginning of the page content
+      const firstChild = document.querySelector('.max-w-4xl');
+      if (firstChild) {
+        firstChild.parentNode?.insertBefore(bannerContainer, firstChild);
+      } else {
+        document.body.insertBefore(bannerContainer, document.body.firstChild);
+      }
     }
+
+    bannerContainer.innerHTML = '';
+    // Banner ad configuration
+    window.atOptions = {
+      key: '7ceb51f5358921a9733e23ce3093adbd',
+      format: 'iframe',
+      height: 90,
+      width: 728,
+      params: {}
+    };
+    const bannerScript = document.createElement('script');
+    bannerScript.src = 'https://www.highperformanceformat.com/7ceb51f5358921a9733e23ce3093adbd/invoke.js';
+    bannerScript.async = true;
+    bannerContainer.appendChild(bannerScript);
+  }, []);
+
+  // Inject social bar ad at the bottom
+  useEffect(() => {
+    let socialContainer = document.getElementById('social-bar-ad');
+    if (!socialContainer) {
+      socialContainer = document.createElement('div');
+      socialContainer.id = 'social-bar-ad';
+      socialContainer.style.display = 'flex';
+      socialContainer.style.justifyContent = 'center';
+      socialContainer.style.margin = '2rem auto 0';
+      // Insert after the main content (assuming .max-w-4xl is the main container)
+      const mainContent = document.querySelector('.max-w-4xl');
+      if (mainContent) {
+        mainContent.parentNode?.insertBefore(socialContainer, mainContent.nextSibling);
+      } else {
+        document.body.appendChild(socialContainer);
+      }
+    }
+
+    socialContainer.innerHTML = '';
+    const socialScript = document.createElement('script');
+    socialScript.src = 'https://pl28967591.profitablecpmratenetwork.com/08/33/70/0833703f900009c855f17f641fefb7d7.js';
+    socialScript.async = true;
+    socialContainer.appendChild(socialScript);
   }, []);
 
   return (
@@ -49,14 +83,6 @@ export default function AdPage() {
       <h2 className="text-3xl font-black mb-8 tracking-tight">
         PREPARING YOUR <span className="text-primary">DOWNLOAD</span>
       </h2>
-
-      {/* Ad Space Container */}
-      <div
-        id="ad-space"
-        className="w-full max-w-2xl min-h-[250px] glass-card border-dashed border-2 border-primary/30 flex flex-col items-center justify-center gap-4 mb-12 group hover:border-primary/60 transition-colors"
-      >
-        {/* The banner ad will be injected here */}
-      </div>
 
       <div className="flex flex-col items-center gap-8">
         {!isReady ? (

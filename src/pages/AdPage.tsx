@@ -6,6 +6,7 @@ export default function AdPage() {
   const [timeLeft, setTimeLeft] = useState(25);
   const [isReady, setIsReady] = useState(false);
 
+  // Timer effect
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -15,11 +16,23 @@ export default function AdPage() {
     }
   }, [timeLeft]);
 
-  // Inject banner ad into the ad-space container
+  // Inject the banner ad inside the ad-space container
   useEffect(() => {
     const adContainer = document.getElementById('ad-space');
     if (adContainer) {
-      adContainer.innerHTML = ''; // Clear any previous content
+      // Clear any previous content
+      adContainer.innerHTML = '';
+
+      // Set the ad configuration globally (as expected by the script)
+      window.atOptions = {
+        key: '7ceb51f5358921a9733e23ce3093adbd',
+        format: 'iframe',
+        height: 90,
+        width: 728,
+        params: {}
+      };
+
+      // Create the ad script
       const script = document.createElement('script');
       script.src = 'https://www.highperformanceformat.com/7ceb51f5358921a9733e23ce3093adbd/invoke.js';
       script.async = true;
@@ -28,19 +41,21 @@ export default function AdPage() {
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="max-w-4xl mx-auto px-4 py-12 flex flex-col items-center text-center min-h-[60vh]"
     >
-      <h2 className="text-3xl font-black mb-8 tracking-tight">PREPARING YOUR <span className="text-primary">DOWNLOAD</span></h2>
+      <h2 className="text-3xl font-black mb-8 tracking-tight">
+        PREPARING YOUR <span className="text-primary">DOWNLOAD</span>
+      </h2>
 
       {/* Ad Space Container */}
-      <div 
-        id="ad-space" 
-        className="w-full max-w-2xl aspect-video glass-card border-dashed border-2 border-primary/30 flex flex-col items-center justify-center gap-4 mb-12 group hover:border-primary/60 transition-colors"
+      <div
+        id="ad-space"
+        className="w-full max-w-2xl min-h-[250px] glass-card border-dashed border-2 border-primary/30 flex flex-col items-center justify-center gap-4 mb-12 group hover:border-primary/60 transition-colors"
       >
-        {/* Banner ad will be injected here */}
+        {/* The banner ad will be injected here */}
       </div>
 
       <div className="flex flex-col items-center gap-8">
@@ -83,9 +98,9 @@ export default function AdPage() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 200 }}
           >
-            <a 
-              href="https://drive.google.com/drive/folders/11Pyn_d5JEHk4P1MvfAjcYFWMhg2gAP_D" 
-              target="_blank" 
+            <a
+              href="https://drive.google.com/drive/folders/11Pyn_d5JEHk4P1MvfAjcYFWMhg2gAP_D"
+              target="_blank"
               rel="noopener noreferrer"
               className="btn-glow-primary flex items-center gap-3 px-16 py-6 text-2xl shadow-[0_0_30px_rgba(123,46,218,0.4)]"
             >
@@ -99,7 +114,7 @@ export default function AdPage() {
 
       <AnimatePresence>
         {isReady && (
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="mt-12 text-secondary-text text-sm max-w-md italic"

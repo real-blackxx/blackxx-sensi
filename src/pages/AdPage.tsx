@@ -9,7 +9,7 @@ const UNLOCK_RULES = {
   ad4: 1,
 };
 
-const AD_SMARTLINK_URL = "https://www.profitablecpmratenetwork.com/nvzqxh2ddc?key=2c26a02e0cdd8a6e6976fb7961ed2ba5";
+const AD_SMARTLINK_URL = "https://www.profitablecpmratenetwork.com/p0z0dddtm?key=4e712111c165f444cb2ca90003560398";
 
 export default function AdPage() {
   const [clicks, setClicks] = useState({ ad1: 0, ad2: 0, ad3: 0, ad4: 0 });

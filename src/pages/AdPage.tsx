@@ -16,13 +16,14 @@ export default function AdPage() {
   const [unlocked, setUnlocked] = useState({ ad1: false, ad2: false, ad3: false, ad4: false });
 
   const bannerRef = useRef<HTMLDivElement>(null);
+  const banner300Ref = useRef<HTMLDivElement>(null);
   const socialBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Inject Banner Ad
+    // Inject 728×90 Banner Ad (top)
     if (bannerRef.current && !bannerRef.current.innerHTML) {
       const script1 = document.createElement('script');
-      script1.innerHTML = `
+      script1.textContent = `
         atOptions = {
           'key' : '7ceb51f5358921a9733e23ce3093adbd',
           'format' : 'iframe',
@@ -38,7 +39,26 @@ export default function AdPage() {
       bannerRef.current.appendChild(script2);
     }
 
-    // Inject Social Bar Ad
+    // Inject 300×250 Banner Ad (middle)
+    if (banner300Ref.current && !banner300Ref.current.innerHTML) {
+      const script1 = document.createElement('script');
+      script1.textContent = `
+        atOptions = {
+          'key' : '6b1d5b6c5b88e1a75335f38373aad8d0',
+          'format' : 'iframe',
+          'height' : 250,
+          'width' : 300,
+          'params' : {}
+        };
+      `;
+      const script2 = document.createElement('script');
+      script2.src = 'https://www.highperformanceformat.com/6b1d5b6c5b88e1a75335f38373aad8d0/invoke.js';
+      
+      banner300Ref.current.appendChild(script1);
+      banner300Ref.current.appendChild(script2);
+    }
+
+    // Inject Social Bar Ad (bottom)
     if (socialBarRef.current && !socialBarRef.current.innerHTML) {
       const script = document.createElement('script');
       script.src = 'https://pl28967591.profitablecpmratenetwork.com/08/33/70/0833703f900009c855f17f641fefb7d7.js';
@@ -73,7 +93,7 @@ export default function AdPage() {
     >
       <h2 className="text-3xl font-black mb-6 tracking-tight">UNLOCK YOUR <span className="text-primary">DOWNLOAD</span></h2>
 
-      {/* Banner Ad Container */}
+      {/* 728×90 Banner Ad Container */}
       <div className="w-full max-w-[728px] min-h-[90px] mb-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
         <div ref={bannerRef} id="banner-ad"></div>
       </div>
@@ -108,6 +128,11 @@ export default function AdPage() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* 300×250 Banner Ad Container */}
+      <div className="w-full max-w-[300px] min-h-[250px] my-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
+        <div ref={banner300Ref} id="banner-300-ad"></div>
       </div>
 
       {/* Social Bar Placeholder / Container */}

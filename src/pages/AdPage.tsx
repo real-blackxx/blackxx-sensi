@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Download, Lock, Unlock, ExternalLink, AlertCircle } from 'lucide-react';
 
-const AD_SMARTLINK_URL = "https://www.profitablecpmratenetwork.com/p0z0dddtm?key=4e712111c165f444cb2ca90003560398";
-
 export default function AdPage() {
   // Random required clicks for ad2, ad3, ad4 (ad1 is fixed 1)
   const [unlockRules, setUnlockRules] = useState(() => ({
@@ -18,7 +16,6 @@ export default function AdPage() {
 
   const bannerRef = useRef<HTMLDivElement>(null);
   const banner300Ref = useRef<HTMLDivElement>(null);
-  const socialBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Inject 728×90 Banner Ad (top)
@@ -39,7 +36,7 @@ export default function AdPage() {
       bannerRef.current.appendChild(script2);
     }
 
-    // Inject 300×250 Banner Ad (will be placed below download button)
+    // Inject 300×250 Banner Ad (placed below download button)
     if (banner300Ref.current && !banner300Ref.current.innerHTML) {
       const script1 = document.createElement('script');
       script1.textContent = `
@@ -56,23 +53,10 @@ export default function AdPage() {
       banner300Ref.current.appendChild(script1);
       banner300Ref.current.appendChild(script2);
     }
-
-    // Inject Social Bar Ad (fixed bottom)
-    if (socialBarRef.current && !socialBarRef.current.innerHTML) {
-      const script = document.createElement('script');
-      script.src = 'https://pl28967591.profitablecpmratenetwork.com/08/33/70/0833703f900009c855f17f641fefb7d7.js';
-      socialBarRef.current.appendChild(script);
-    }
   }, []);
-
-  const triggerPopunder = () => {
-    window.open(AD_SMARTLINK_URL, '_blank');
-  };
 
   const handleAdClick = (adKey: keyof typeof unlockRules) => {
     if (unlocked[adKey]) return;
-
-    triggerPopunder();
 
     const newClicks = { ...clicks, [adKey]: clicks[adKey] + 1 };
     setClicks(newClicks);
@@ -185,9 +169,6 @@ export default function AdPage() {
       <div className="w-full max-w-[300px] min-h-[250px] my-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
         <div ref={banner300Ref} id="banner-300-ad"></div>
       </div>
-
-      {/* Social Bar Placeholder / Container (fixed bottom) */}
-      <div ref={socialBarRef} className="fixed bottom-0 left-0 w-full z-50"></div>
 
       <p className="mt-12 text-secondary-text text-sm max-w-md italic">
         Thank you for choosing BLACKXx SENSI. Completing these ads helps us keep the service free for everyone.

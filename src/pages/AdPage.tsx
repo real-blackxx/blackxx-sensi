@@ -21,7 +21,7 @@ export default function AdPage() {
   const socialBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Inject 728×90 Banner Ad
+    // Inject 728×90 Banner Ad (top)
     if (bannerRef.current && !bannerRef.current.innerHTML) {
       const script1 = document.createElement('script');
       script1.textContent = `
@@ -39,7 +39,7 @@ export default function AdPage() {
       bannerRef.current.appendChild(script2);
     }
 
-    // Inject 300×250 Banner Ad
+    // Inject 300×250 Banner Ad (will be placed below download button)
     if (banner300Ref.current && !banner300Ref.current.innerHTML) {
       const script1 = document.createElement('script');
       script1.textContent = `
@@ -57,7 +57,7 @@ export default function AdPage() {
       banner300Ref.current.appendChild(script2);
     }
 
-    // Inject Social Bar Ad
+    // Inject Social Bar Ad (fixed bottom)
     if (socialBarRef.current && !socialBarRef.current.innerHTML) {
       const script = document.createElement('script');
       script.src = 'https://pl28967591.profitablecpmratenetwork.com/08/33/70/0833703f900009c855f17f641fefb7d7.js';
@@ -92,12 +92,12 @@ export default function AdPage() {
     >
       <h2 className="text-3xl font-black mb-6 tracking-tight">UNLOCK YOUR <span className="text-primary">DOWNLOAD</span></h2>
 
-      {/* 728×90 Banner Ad Container */}
+      {/* 728×90 Banner Ad (top) */}
       <div className="w-full max-w-[728px] min-h-[90px] mb-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
         <div ref={bannerRef} id="banner-ad"></div>
       </div>
 
-      {/* Unlock Progress */}
+      {/* Unlock Progress (4 buttons) */}
       <div className="w-full max-w-2xl mb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {(Object.keys(unlockRules) as Array<keyof typeof unlockRules>).map((adKey, index) => (
@@ -117,7 +117,6 @@ export default function AdPage() {
                 <span className={`text-lg font-black ${unlocked[adKey] ? 'text-primary' : 'text-white'}`}>
                   {unlocked[adKey] ? 'COMPLETED' : `WATCH AD ${index + 1}`}
                 </span>
-                {/* No counter displayed */}
               </div>
               <div className={`
                 w-10 h-10 rounded-full flex items-center justify-center transition-colors
@@ -130,14 +129,7 @@ export default function AdPage() {
         </div>
       </div>
 
-      {/* 300×250 Banner Ad Container */}
-      <div className="w-full max-w-[300px] min-h-[250px] my-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
-        <div ref={banner300Ref} id="banner-300-ad"></div>
-      </div>
-
-      {/* Social Bar Placeholder / Container */}
-      <div ref={socialBarRef} className="fixed bottom-0 left-0 w-full z-50"></div>
-
+      {/* Download area */}
       <div className="flex flex-col items-center gap-8 w-full max-w-md">
         <AnimatePresence mode="wait">
           {!allUnlocked ? (
@@ -188,6 +180,14 @@ export default function AdPage() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* 300×250 Banner Ad (below download button) */}
+      <div className="w-full max-w-[300px] min-h-[250px] my-8 bg-white/5 rounded-lg flex items-center justify-center overflow-hidden">
+        <div ref={banner300Ref} id="banner-300-ad"></div>
+      </div>
+
+      {/* Social Bar Placeholder / Container (fixed bottom) */}
+      <div ref={socialBarRef} className="fixed bottom-0 left-0 w-full z-50"></div>
 
       <p className="mt-12 text-secondary-text text-sm max-w-md italic">
         Thank you for choosing BLACKXx SENSI. Completing these ads helps us keep the service free for everyone.

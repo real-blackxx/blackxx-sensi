@@ -18,6 +18,7 @@ export default function AdPage() {
   const bannerRef = useRef<HTMLDivElement>(null);
   const banner300Ref = useRef<HTMLDivElement>(null);
   const socialBarRef = useRef<HTMLDivElement>(null);
+  const scriptInjected = useRef(false); // to ensure script is injected only once
 
   useEffect(() => {
     // Inject 728×90 Banner Ad (top)
@@ -70,10 +71,24 @@ export default function AdPage() {
     window.open(AD_SMARTLINK_URL, '_blank');
   };
 
+  const injectScriptPopunder = () => {
+    if (scriptInjected.current) return;
+    const script = document.createElement('script');
+    script.src = 'https://pl28977054.profitablecpmratenetwork.com/b6/d0/fa/b6d0fa63da43bd54e14d6650d1f78035.js';
+    document.body.appendChild(script);
+    scriptInjected.current = true;
+  };
+
   const handleAdClick = (adKey: keyof typeof UNLOCK_RULES) => {
     if (unlocked[adKey]) return;
 
-    triggerPopunder();
+    // For ad1, inject the script popunder (only once)
+    if (adKey === 'ad1') {
+      injectScriptPopunder();
+    } else {
+      // For other ads, open the Smartlink
+      triggerPopunder();
+    }
 
     const newClicks = { ...clicks, [adKey]: clicks[adKey] + 1 };
     setClicks(newClicks);

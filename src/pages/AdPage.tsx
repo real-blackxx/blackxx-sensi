@@ -2,26 +2,34 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Download, Lock, Unlock, ExternalLink, AlertCircle } from 'lucide-react';
 
-const UNLOCK_RULES = {
+// Base rules – Ad1 always 1 click; others will be randomised
+const BASE_UNLOCK_RULES = {
   ad1: 1,
-  ad2: 1,
-  ad3: 2,
-  ad4: 1,
+  ad2: null,   // to be randomised
+  ad3: null,   // to be randomised
+  ad4: null,   // to be randomised
 };
 
 const AD_SMARTLINK_URL = "https://www.profitablecpmratenetwork.com/p0z0dddtm?key=4e712111c165f444cb2ca90003560398";
 
 export default function AdPage() {
+  // Randomised required clicks for ad2, ad3, ad4
+  const [unlockRules, setUnlockRules] = useState(() => ({
+    ad1: 1,
+    ad2: Math.floor(Math.random() * 4) + 2, // 2–5 clicks
+    ad3: Math.floor(Math.random() * 4) + 2,
+    ad4: Math.floor(Math.random() * 4) + 2,
+  }));
+
   const [clicks, setClicks] = useState({ ad1: 0, ad2: 0, ad3: 0, ad4: 0 });
   const [unlocked, setUnlocked] = useState({ ad1: false, ad2: false, ad3: false, ad4: false });
 
   const bannerRef = useRef<HTMLDivElement>(null);
   const banner300Ref = useRef<HTMLDivElement>(null);
   const socialBarRef = useRef<HTMLDivElement>(null);
-  const scriptInjected = useRef(false); // to ensure script is injected only once
 
+  // Inject all banner ads (same as before)
   useEffect(() => {
-    // Inject 728×90 Banner Ad (top)
     if (bannerRef.current && !bannerRef.current.innerHTML) {
       const script1 = document.createElement('script');
       script1.textContent = `
@@ -35,12 +43,10 @@ export default function AdPage() {
       `;
       const script2 = document.createElement('script');
       script2.src = 'https://www.highperformanceformat.com/7ceb51f5358921a9733e23ce3093adbd/invoke.js';
-      
       bannerRef.current.appendChild(script1);
       bannerRef.current.appendChild(script2);
     }
 
-    // Inject 300×250 Banner Ad (middle)
     if (banner300Ref.current && !banner300Ref.current.innerHTML) {
       const script1 = document.createElement('script');
       script1.textContent = `
@@ -54,12 +60,10 @@ export default function AdPage() {
       `;
       const script2 = document.createElement('script');
       script2.src = 'https://www.highperformanceformat.com/6b1d5b6c5b88e1a75335f38373aad8d0/invoke.js';
-      
       banner300Ref.current.appendChild(script1);
       banner300Ref.current.appendChild(script2);
     }
 
-    // Inject Social Bar Ad (bottom)
     if (socialBarRef.current && !socialBarRef.current.innerHTML) {
       const script = document.createElement('script');
       script.src = 'https://pl28967591.profitablecpmratenetwork.com/08/33/70/0833703f900009c855f17f641fefb7d7.js';
@@ -71,29 +75,15 @@ export default function AdPage() {
     window.open(AD_SMARTLINK_URL, '_blank');
   };
 
-  const injectScriptPopunder = () => {
-    if (scriptInjected.current) return;
-    const script = document.createElement('script');
-    script.src = 'https://pl28977054.profitablecpmratenetwork.com/b6/d0/fa/b6d0fa63da43bd54e14d6650d1f78035.js';
-    document.body.appendChild(script);
-    scriptInjected.current = true;
-  };
-
-  const handleAdClick = (adKey: keyof typeof UNLOCK_RULES) => {
+  const handleAdClick = (adKey: keyof typeof unlockRules) => {
     if (unlocked[adKey]) return;
 
-    // For ad1, inject the script popunder (only once)
-    if (adKey === 'ad1') {
-      injectScriptPopunder();
-    } else {
-      // For other ads, open the Smartlink
-      triggerPopunder();
-    }
+    triggerPopunder();
 
     const newClicks = { ...clicks, [adKey]: clicks[adKey] + 1 };
     setClicks(newClicks);
 
-    if (newClicks[adKey] >= UNLOCK_RULES[adKey]) {
+    if (newClicks[adKey] >= unlockRules[adKey]) {
       setUnlocked({ ...unlocked, [adKey]: true });
     }
   };
@@ -116,32 +106,40 @@ export default function AdPage() {
       {/* Unlock Progress */}
       <div className="w-full max-w-2xl mb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {(Object.keys(UNLOCK_RULES) as Array<keyof typeof UNLOCK_RULES>).map((adKey, index) => (
-            <button
-              key={adKey}
-              onClick={() => handleAdClick(adKey)}
-              disabled={unlocked[adKey]}
-              className={`
-                relative p-6 rounded-xl border-2 transition-all duration-300 flex items-center justify-between group
-                ${unlocked[adKey] 
-                  ? 'bg-primary/20 border-primary/50 cursor-default' 
-                  : 'bg-white/5 border-white/10 hover:border-primary/50 hover:bg-white/10 active:scale-95'}
-              `}
-            >
-              <div className="flex flex-col items-start">
-                <span className="text-xs font-bold text-secondary-text uppercase tracking-wider mb-1">Step {index + 1}</span>
-                <span className={`text-lg font-black ${unlocked[adKey] ? 'text-primary' : 'text-white'}`}>
-                  {unlocked[adKey] ? 'COMPLETED' : `WATCH AD ${index + 1}`}
-                </span>
-              </div>
-              <div className={`
-                w-10 h-10 rounded-full flex items-center justify-center transition-colors
-                ${unlocked[adKey] ? 'bg-primary text-white' : 'bg-white/10 text-secondary-text group-hover:text-primary'}
-              `}>
-                {unlocked[adKey] ? <Unlock size={20} /> : <Lock size={20} />}
-              </div>
-            </button>
-          ))}
+          {(Object.keys(unlockRules) as Array<keyof typeof unlockRules>).map((adKey, index) => {
+            const required = unlockRules[adKey];
+            return (
+              <button
+                key={adKey}
+                onClick={() => handleAdClick(adKey)}
+                disabled={unlocked[adKey]}
+                className={`
+                  relative p-6 rounded-xl border-2 transition-all duration-300 flex items-center justify-between group
+                  ${unlocked[adKey] 
+                    ? 'bg-primary/20 border-primary/50 cursor-default' 
+                    : 'bg-white/5 border-white/10 hover:border-primary/50 hover:bg-white/10 active:scale-95'}
+                `}
+              >
+                <div className="flex flex-col items-start">
+                  <span className="text-xs font-bold text-secondary-text uppercase tracking-wider mb-1">Step {index + 1}</span>
+                  <span className={`text-lg font-black ${unlocked[adKey] ? 'text-primary' : 'text-white'}`}>
+                    {unlocked[adKey] ? 'COMPLETED' : `WATCH AD ${index + 1}`}
+                  </span>
+                  {!unlocked[adKey] && required > 1 && (
+                    <span className="text-xs text-secondary-text mt-1">
+                      {clicks[adKey]} / {required}
+                    </span>
+                  )}
+                </div>
+                <div className={`
+                  w-10 h-10 rounded-full flex items-center justify-center transition-colors
+                  ${unlocked[adKey] ? 'bg-primary text-white' : 'bg-white/10 text-secondary-text group-hover:text-primary'}
+                `}>
+                  {unlocked[adKey] ? <Unlock size={20} /> : <Lock size={20} />}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 

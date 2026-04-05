@@ -1,40 +1,55 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/Home';
-import Premium from './pages/Premium';
-import Free from './pages/Free';
-import AdPage from './pages/AdPage';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
+import { Download } from 'lucide-react';
 
-export default function App() {
+export default function AdPage() {
   return (
-    <Router>
-      <ScrollToTop />
-      <div className="min-h-screen flex flex-col selection:bg-primary selection:text-white overflow-x-hidden">
-        {/* Background Glows */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/10 blur-[120px] rounded-full" />
-          <div className="absolute top-[40%] right-[10%] w-[20%] h-[20%] bg-highlight/10 blur-[100px] rounded-full" />
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center text-center min-h-[80vh] relative z-10"
+    >
+      <div className="w-full glass-card p-8 md:p-12 border-white/5">
+        {/* Heading */}
+        <h2 className="text-3xl md:text-4xl font-black mb-8 tracking-tighter uppercase">
+          HOW TO DOWNLOAD <span className="text-primary">FREE SENSI</span>
+        </h2>
+
+        {/* Video Tutorial */}
+        <div className="w-full max-w-2xl mx-auto mb-8 rounded-2xl overflow-hidden border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <video 
+            src="/tutorial.mp4" 
+            controls 
+            playsInline
+            className="w-full aspect-video bg-black/40"
+          >
+            Your browser does not support the video tag.
+          </video>
         </div>
 
-        <Header />
-        
-        <main className="flex-grow relative z-10">
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/premium" element={<Premium />} />
-              <Route path="/free" element={<Free />} />
-              <Route path="/ad" element={<AdPage />} />
-            </Routes>
-          </AnimatePresence>
-        </main>
+        {/* Download Button */}
+        <div className="flex justify-center">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full max-w-md"
+          >
+            <a 
+              href="https://shrinkme.click/PREMIUM-SENSI" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-glow-primary flex items-center justify-center gap-2 md:gap-3 w-full py-4 md:py-6 text-base md:text-xl font-black shadow-[0_0_30px_rgba(123,46,218,0.4)]"
+            >
+              <Download className="w-5 h-5 md:w-6 md:h-6" />
+              CLICK HERE TO DOWNLOAD
+            </a>
+          </motion.div>
+        </div>
 
-        <Footer />
+        <p className="mt-12 text-secondary-text text-sm max-w-md mx-auto italic opacity-50">
+          Thank you for choosing BLACKXx SENSI.
+        </p>
       </div>
-    </Router>
+    </motion.div>
   );
 }

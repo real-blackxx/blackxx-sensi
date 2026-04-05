@@ -1,41 +1,40 @@
-import { motion } from 'motion/react';
-import { Download } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
+import Home from './pages/Home';
+import Premium from './pages/Premium';
+import Free from './pages/Free';
+import AdPage from './pages/AdPage';
+import { motion, AnimatePresence } from 'motion/react';
 
-const SHRINKME_URL = "https://shrinkme.click/PREMIUM-SENSI";
-
-export default function AdPage() {
+export default function App() {
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center text-center min-h-[80vh]"
-    >
-      <h2 className="text-3xl font-black mb-6 tracking-tight">HOW TO DOWNLOAD FREE SENSI</h2>
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col selection:bg-primary selection:text-white overflow-x-hidden">
+        {/* Background Glows */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/10 blur-[120px] rounded-full" />
+          <div className="absolute top-[40%] right-[10%] w-[20%] h-[20%] bg-highlight/10 blur-[100px] rounded-full" />
+        </div>
 
-      {/* Video tutorial */}
-      <div className="w-full max-w-2xl mb-8 rounded-lg overflow-hidden shadow-lg">
-        <video 
-          controls 
-          autoPlay 
-          muted 
-          className="w-full"
-          poster="https://placehold.co/1280x720/0A0A0F/FFFFFF?text=Video+Preview"
-        >
-          <source src="/tutorial.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <Header />
+        
+        <main className="flex-grow relative z-10">
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/premium" element={<Premium />} />
+              <Route path="/free" element={<Free />} />
+              <Route path="/ad" element={<AdPage />} />
+            </Routes>
+          </AnimatePresence>
+        </main>
+
+        <Footer />
       </div>
-
-      {/* Download button */}
-      <a 
-        href={SHRINKME_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-glow-primary flex items-center justify-center gap-3 px-8 py-4 text-xl shadow-[0_0_30px_rgba(123,46,218,0.4)]"
-      >
-        <Download size={24} />
-        CLICK HERE TO DOWNLOAD
-      </a>
-    </motion.div>
+    </Router>
   );
 }
